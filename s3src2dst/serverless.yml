@@ -1,0 +1,55 @@
+
+service: s3copysrctodst
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.11
+  memorySize: 2000
+  timeout: 30
+  architecture: x86_64
+  deploymentBucket:
+    name: ramuslsbucket
+  # s3:
+  #   bucketOne:
+  #     name: s3rdaradst
+  iam:
+    role:
+      statements:
+        # Allow functions to list all buckets
+        - Effect: Allow
+          Action: 'logs:CreateLogGroup'
+          Resource: 'arn:aws:logs:*:*:*'
+        # Allow functions to read/write objects in a bucket
+        - Effect: Allow
+          Action: 'logs:*'
+          Resource: 'arn:aws:logs:*:*:*'  
+        - Effect: Allow
+          Action: 's3:*'
+          Resource: 'arn:aws:s3:::*'  
+package:
+  patterns:
+    - '!.git/**'
+    - '!*.txt'
+    - '!whizlabs_sls/**'
+    - '!.serverless/**'
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+resources:
+  Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: s3rdaradst
+
+functions:
+  hello:
+    handler: s3file_copy.lambda_handler
+    name: s3srctodst-lambda-${sls:stage}
+    description: s3 file copy from src to dest
+    events:
+      - s3:
+          bucket: s3rdarasrc
+          event: s3:ObjectCreated:*
