@@ -29,5 +29,9 @@ $RECYCLE.BIN/
 
 
 .serverless
+.txt
+manual/*
+
+
 
 # End of https://www.toptal.com/developers/gitignore/api/windows
