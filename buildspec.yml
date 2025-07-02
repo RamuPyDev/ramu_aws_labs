@@ -25,5 +25,5 @@ phases:
 
 artifacts:
   files:
-    - output2.zip
+    - output.zip
   discard-paths: yes
