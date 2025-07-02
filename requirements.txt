@@ -1,0 +1,4 @@
+requests
+boto3
+pytest
+# add other modules you want to install
